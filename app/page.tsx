@@ -1,65 +1,96 @@
-import Image from "next/image";
+import ContactForm from "@/components/ContactForm";
+import { SITE_NAME, SITE_PHONE, SITE_EMAIL, SITE_ADDRESS } from "@/lib/constants";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="flex flex-col">
+      {/* Header */}
+      <header className="bg-blue-700 text-white">
+        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+          <h1 className="text-xl font-bold">{SITE_NAME}</h1>
+          <nav className="flex gap-6 text-sm">
+            <a href="#services" className="hover:text-blue-200 transition-colors">Leistungen</a>
+            <a href="#contact" className="hover:text-blue-200 transition-colors">Kontakt</a>
+          </nav>
+        </div>
+      </header>
+
+      {/* Hero */}
+      <section className="bg-gradient-to-br from-blue-700 to-blue-900 text-white py-20 px-6">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-4xl font-bold mb-4">Schnell. Zuverlässig. Günstig.</h2>
+          <p className="text-blue-100 text-lg mb-8">
+            Professionelle Reparatur für Smartphones, Tablets und Laptops.
+            Meist am gleichen Tag fertig.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
           <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#contact"
+            className="bg-white text-blue-700 font-semibold px-8 py-3 rounded-lg hover:bg-blue-50 transition-colors"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
+            Jetzt anfragen
           </a>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* Services */}
+      <section id="services" className="py-16 px-6 bg-gray-50">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-2xl font-bold text-center mb-10 text-blue-800">Unsere Leistungen</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {[
+              { title: "Smartphone Reparatur", desc: "Display, Akku, Kamera — wir reparieren alle Marken." },
+              { title: "Tablet Service", desc: "iPad, Samsung, Huawei — schnelle Diagnose und Reparatur." },
+              { title: "Laptop Reparatur", desc: "Hardware, Software, Datensicherung — alles aus einer Hand." },
+            ].map(s => (
+              <div key={s.title} className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
+                <h3 className="font-semibold text-blue-700 mb-2">{s.title}</h3>
+                <p className="text-gray-600 text-sm">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact */}
+      <section id="contact" className="py-16 px-6">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-2xl font-bold text-center mb-2 text-blue-800">Kontakt</h2>
+          <p className="text-center text-gray-500 mb-10">Schreiben Sie uns — wir antworten innerhalb von 24 Stunden.</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div className="space-y-4 text-gray-600">
+              <div>
+                <p className="font-semibold text-gray-800">Adresse</p>
+                <p>{SITE_ADDRESS}</p>
+              </div>
+              <div>
+                <p className="font-semibold text-gray-800">Telefon</p>
+                <a href={`tel:${SITE_PHONE}`} className="text-blue-600 hover:underline">{SITE_PHONE}</a>
+              </div>
+              <div>
+                <p className="font-semibold text-gray-800">E-Mail</p>
+                <a href={`mailto:${SITE_EMAIL}`} className="text-blue-600 hover:underline">{SITE_EMAIL}</a>
+              </div>
+              <div>
+                <p className="font-semibold text-gray-800">Öffnungszeiten</p>
+                <p>Mo–Fr: 09:00–18:00</p>
+                <p>Sa: 10:00–15:00</p>
+              </div>
+            </div>
+            <ContactForm />
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-blue-900 text-blue-200 py-6 px-6 mt-auto">
+        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2 text-sm">
+          <p>© {new Date().getFullYear()} {SITE_NAME}</p>
+          <div className="flex gap-4">
+            <a href="/impressum/" className="hover:text-white transition-colors">Impressum</a>
+            <a href="/datenschutz/" className="hover:text-white transition-colors">Datenschutz</a>
+          </div>
+        </div>
+      </footer>
+    </main>
   );
 }
