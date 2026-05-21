@@ -95,15 +95,96 @@ export const handler = async (event) => {
     },
   }));
 
+  const isAttending = attending === true;
+  const guestCount  = guests_count ?? 1;
+  const subject     = isAttending
+    ? `🎉 RSVP: ${name} kommt! (${guestCount} ${guestCount === 1 ? "Person" : "Personen"})`
+    : `😢 RSVP: ${name} kann leider nicht kommen`;
+
+  const html = `<!DOCTYPE html>
+<html lang="de">
+<head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background:#FBF4E4;font-family:Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#FBF4E4;padding:32px 0;">
+    <tr><td align="center">
+      <table width="560" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+
+        <!-- Header -->
+        <tr><td style="background:${isAttending ? "#E75C7D" : "#888"};padding:28px 32px;text-align:center;">
+          <p style="margin:0;font-size:40px;">${isAttending ? "🎉" : "😢"}</p>
+          <h1 style="margin:8px 0 4px;color:#fff;font-size:22px;">
+            ${isAttending ? "Neue Zusage!" : "Absage"}
+          </h1>
+          <p style="margin:0;color:rgba(255,255,255,0.85);font-size:14px;">
+            Muaz & Mikail · Geburtstagsparty · 7. Juni 2026
+          </p>
+        </td></tr>
+
+        <!-- Body -->
+        <tr><td style="padding:32px;">
+
+          <!-- Status badge -->
+          <div style="background:${isAttending ? "#C8C72A" : "#f0f0f0"};border-radius:8px;padding:12px 20px;margin-bottom:24px;text-align:center;">
+            <strong style="font-size:16px;color:#242424;">
+              ${isAttending
+                ? `✅ Kommt &nbsp;·&nbsp; ${guestCount} ${guestCount === 1 ? "Person" : "Personen"}`
+                : "❌ Kann leider nicht kommen"}
+            </strong>
+          </div>
+
+          <!-- Details -->
+          <table width="100%" cellpadding="0" cellspacing="0">
+            ${[
+              ["👤 Name",    name],
+              ["📧 E-Mail",  email],
+              ["📱 Telefon", phone || "—"],
+            ].map(([label, value]) => `
+            <tr>
+              <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#888;font-size:13px;width:110px;">${label}</td>
+              <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#242424;font-size:14px;font-weight:600;">${value}</td>
+            </tr>`).join("")}
+            ${message ? `
+            <tr>
+              <td style="padding:10px 0;color:#888;font-size:13px;vertical-align:top;">💬 Nachricht</td>
+              <td style="padding:10px 0;color:#242424;font-size:14px;">${message.replace(/\n/g, "<br>")}</td>
+            </tr>` : ""}
+          </table>
+
+        </td></tr>
+
+        <!-- Footer -->
+        <tr><td style="background:#f9f9f9;padding:16px 32px;text-align:center;border-top:1px solid #eee;">
+          <p style="margin:0;color:#aaa;font-size:12px;">
+            ${new Date(timestamp).toLocaleString("de-DE", { timeZone: "Europe/Berlin" })}
+            &nbsp;·&nbsp; DSGVO-Einwilligung: Ja
+          </p>
+        </td></tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+
+  const text = `${subject}
+
+Name:     ${name}
+E-Mail:   ${email}
+Telefon:  ${phone || "—"}
+Status:   ${isAttending ? `Kommt (${guestCount} ${guestCount === 1 ? "Person" : "Personen"})` : "Kann nicht kommen"}
+${message ? `\nNachricht:\n${message}` : ""}
+
+Zeitpunkt: ${new Date(timestamp).toLocaleString("de-DE", { timeZone: "Europe/Berlin" })}
+DSGVO-Einwilligung: Ja`;
+
   await ses.send(new SendEmailCommand({
     Source:      FROM,
     Destination: { ToAddresses: [TO] },
     Message: {
-      Subject: { Data: `Neue Anfrage von ${name}` },
+      Subject: { Data: subject },
       Body: {
-        Text: {
-          Data: `Name: ${name}\nE-Mail: ${email}\nTelefon: ${phone ?? "-"}\n\nNachricht:\n${message}\n\nZeitpunkt: ${timestamp}\nDSGVO-Einwilligung: Ja`,
-        },
+        Html: { Data: html },
+        Text: { Data: text },
       },
     },
   }));
