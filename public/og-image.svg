@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#FBF4E4"/>
+
+  <!-- Top / bottom accent bars -->
+  <rect x="0" y="0"   width="1200" height="12" fill="#E75C7D"/>
+  <rect x="0" y="618" width="1200" height="12" fill="#C8C72A"/>
+
+  <!-- Balloon decorations -->
+  <ellipse cx="95"  cy="160" rx="44" ry="56" fill="#E75C7D" opacity="0.35"/>
+  <line   x1="95"  y1="216" x2="95"  y2="270" stroke="#bbb" stroke-width="2"/>
+  <ellipse cx="1105" cy="190" rx="38" ry="50" fill="#C8C72A" opacity="0.4"/>
+  <line   x1="1105" y1="240" x2="1105" y2="290" stroke="#bbb" stroke-width="2"/>
+  <ellipse cx="85"  cy="490" rx="36" ry="46" fill="#C8C72A" opacity="0.35"/>
+  <line   x1="85"  y1="536" x2="85"  y2="580" stroke="#bbb" stroke-width="2"/>
+  <ellipse cx="1115" cy="470" rx="42" ry="54" fill="#E75C7D" opacity="0.35"/>
+  <line   x1="1115" y1="524" x2="1115" y2="570" stroke="#bbb" stroke-width="2"/>
+
+  <!-- Star decorations -->
+  <text x="200" y="120" font-size="40" font-family="sans-serif" fill="#C8C72A" opacity="0.6">★</text>
+  <text x="950" y="100" font-size="32" font-family="sans-serif" fill="#E75C7D" opacity="0.6">★</text>
+  <text x="160" y="540" font-size="28" font-family="sans-serif" fill="#E75C7D" opacity="0.5">★</text>
+  <text x="1010" y="550" font-size="36" font-family="sans-serif" fill="#C8C72A" opacity="0.5">★</text>
+
+  <!-- Main title -->
+  <text x="600" y="215"
+    font-family="Arial Black,Arial,Helvetica,sans-serif"
+    font-size="96"
+    font-weight="900"
+    text-anchor="middle"
+    fill="#242424">MUAZ &amp; MIKAIL</text>
+
+  <!-- Pink badge -->
+  <rect x="290" y="248" width="620" height="82" rx="41" fill="#E75C7D"/>
+  <text x="600" y="302"
+    font-family="Arial Black,Arial,Helvetica,sans-serif"
+    font-size="44"
+    font-weight="700"
+    text-anchor="middle"
+    fill="#ffffff">4 &amp; 7. Geburtstag 🎂</text>
+
+  <!-- Dashed divider -->
+  <line x1="220" y1="382" x2="980" y2="382" stroke="#C8C72A" stroke-width="3" stroke-dasharray="12,8"/>
+
+  <!-- Date & time -->
+  <text x="600" y="440"
+    font-family="Arial,Helvetica,sans-serif"
+    font-size="48"
+    font-weight="700"
+    text-anchor="middle"
+    fill="#242424">Sonntag, 7. Juni 2026  ·  15:00 Uhr</text>
+
+  <!-- Domain -->
+  <text x="600" y="530"
+    font-family="Arial,Helvetica,sans-serif"
+    font-size="30"
+    font-weight="600"
+    text-anchor="middle"
+    fill="#E75C7D">party.ismailkilicaslan.de</text>
+</svg>
