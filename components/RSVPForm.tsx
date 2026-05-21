@@ -16,8 +16,8 @@ export default function RSVPForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.attending) { setErrorMsg("Bitte wählen Sie eine Option."); return; }
-    if (!form.consent) { setErrorMsg("Bitte stimmen Sie der Datenschutzerklärung zu."); return; }
+    if (!form.attending) { setErrorMsg("Bitte wähle eine Option aus! 🎈"); return; }
+    if (!form.consent) { setErrorMsg("Bitte stimme der Datenschutzerklärung zu."); return; }
     setStatus("loading");
     setErrorMsg("");
 
@@ -41,20 +41,20 @@ export default function RSVPForm() {
       setStatus("success");
     } catch {
       setStatus("error");
-      setErrorMsg("Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.");
+      setErrorMsg("Ein Fehler ist aufgetreten. Bitte versuche es später nochmal.");
     }
   };
 
   if (status === "success") {
     return (
-      <div className="text-center py-10 space-y-3">
-        <p className="text-5xl">
+      <div className="text-center py-10 space-y-4">
+        <p className="text-6xl animate-bounce-gentle">
           {form.attending === "ja" ? "🎉" : "💌"}
         </p>
-        <p className="text-2xl font-bold text-amber-400">
-          {form.attending === "ja" ? "Wir freuen uns auf dich!" : "Danke für deine Antwort!"}
+        <p className="text-3xl font-bold" style={{ color: "#E75C7D" }}>
+          {form.attending === "ja" ? "Super! Wir freuen uns! 🎈" : "Danke für deine Antwort!"}
         </p>
-        <p className="text-blue-300 text-sm">
+        <p className="text-lg" style={{ color: "#242424" }}>
           {form.attending === "ja"
             ? "Deine Anmeldung wurde erfolgreich übermittelt."
             : "Schade, aber vielleicht beim nächsten Mal!"}
@@ -63,38 +63,44 @@ export default function RSVPForm() {
     );
   }
 
+  const inputClass = "w-full px-5 py-3 rounded-2xl text-base font-medium focus:outline-none transition-colors"
+    + " border-2 border-transparent focus:border-[#E75C7D]"
+    + " bg-[#FBF4E4] text-[#242424] placeholder:text-gray-400";
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-5">
       <input
         required
         type="text"
         placeholder="Dein Name *"
         value={form.name}
         onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
-        className="w-full bg-blue-900/40 border border-amber-400/20 rounded-xl px-4 py-3 text-white placeholder:text-blue-400 focus:outline-none focus:border-amber-400/60 transition-colors"
+        className={inputClass}
       />
       <input
         type="email"
         placeholder="E-Mail (optional)"
         value={form.email}
         onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
-        className="w-full bg-blue-900/40 border border-amber-400/20 rounded-xl px-4 py-3 text-white placeholder:text-blue-400 focus:outline-none focus:border-amber-400/60 transition-colors"
+        className={inputClass}
       />
 
+      {/* Attending toggle */}
       <div className="grid grid-cols-2 gap-3">
         {[
-          { value: "ja", label: "🎉 Ich komme!" },
+          { value: "ja",   label: "🎈 Ich bin dabei!" },
           { value: "nein", label: "😢 Ich kann leider nicht" },
         ].map(opt => (
           <button
             key={opt.value}
             type="button"
             onClick={() => setForm(p => ({ ...p, attending: opt.value }))}
-            className={`py-3 px-4 rounded-xl border text-sm font-medium transition-all ${
+            className="py-3 px-3 rounded-2xl text-sm font-semibold transition-all border-2"
+            style={
               form.attending === opt.value
-                ? "bg-amber-400 border-amber-400 text-blue-950"
-                : "bg-blue-900/40 border-amber-400/20 text-blue-300 hover:border-amber-400/40"
-            }`}
+                ? { background: "#E75C7D", borderColor: "#E75C7D", color: "#fff" }
+                : { background: "#FBF4E4", borderColor: "#e5e5e5", color: "#242424" }
+            }
           >
             {opt.label}
           </button>
@@ -103,14 +109,16 @@ export default function RSVPForm() {
 
       {form.attending === "ja" && (
         <div>
-          <label className="text-blue-300 text-sm mb-2 block">Anzahl der Personen</label>
+          <label className="block font-semibold mb-2" style={{ color: "#242424" }}>
+            Wie viele kommen?
+          </label>
           <select
             value={form.guests}
             onChange={e => setForm(p => ({ ...p, guests: e.target.value }))}
-            className="w-full bg-blue-900/40 border border-amber-400/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-400/60 transition-colors"
+            className={inputClass}
           >
             {[1, 2, 3, 4, 5].map(n => (
-              <option key={n} value={n} className="bg-blue-950">{n} Person{n > 1 ? "en" : ""}</option>
+              <option key={n} value={n}>{n} Person{n > 1 ? "en" : ""}</option>
             ))}
           </select>
         </div>
@@ -121,30 +129,35 @@ export default function RSVPForm() {
         placeholder="Nachricht (optional)"
         value={form.message}
         onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
-        className="w-full bg-blue-900/40 border border-amber-400/20 rounded-xl px-4 py-3 text-white placeholder:text-blue-400 focus:outline-none focus:border-amber-400/60 transition-colors resize-none"
+        className={`${inputClass} resize-none`}
       />
 
-      <label className="flex items-start gap-3 text-sm text-blue-400 cursor-pointer">
+      <label className="flex items-start gap-3 text-sm font-medium cursor-pointer" style={{ color: "#242424" }}>
         <input
           type="checkbox"
           checked={form.consent}
           onChange={e => setForm(p => ({ ...p, consent: e.target.checked }))}
-          className="mt-1 accent-amber-400"
+          className="mt-1 accent-[#E75C7D] w-4 h-4"
         />
         <span>
           Ich stimme der Verarbeitung meiner Daten gemäß der{" "}
-          <a href="/datenschutz/" className="underline text-amber-400/80 hover:text-amber-400">Datenschutzerklärung</a> zu. *
+          <a href="/datenschutz/" className="underline font-semibold" style={{ color: "#E75C7D" }}>
+            Datenschutzerklärung
+          </a>{" "}zu. *
         </span>
       </label>
 
-      {errorMsg && <p className="text-red-400 text-sm">{errorMsg}</p>}
+      {errorMsg && (
+        <p className="text-sm font-medium" style={{ color: "#E75C7D" }}>{errorMsg}</p>
+      )}
 
       <button
         type="submit"
         disabled={status === "loading"}
-        className="w-full bg-gradient-to-r from-amber-400 to-yellow-300 text-blue-950 font-bold py-3 rounded-xl hover:from-amber-300 hover:to-yellow-200 disabled:opacity-50 transition-all shadow-lg shadow-amber-400/20"
+        className="w-full py-4 rounded-2xl font-bold text-lg shadow-lg transition-all disabled:opacity-50"
+        style={{ background: "#C8C72A", color: "#242424" }}
       >
-        {status === "loading" ? "Wird gesendet…" : "Anmeldung absenden ✨"}
+        {status === "loading" ? "Wird gesendet… 🎈" : "Ich bin dabei! 🎉"}
       </button>
     </form>
   );
