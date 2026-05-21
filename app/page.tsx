@@ -1,6 +1,7 @@
 import Countdown from "@/components/Countdown";
 import RSVPForm from "@/components/RSVPForm";
 import Confetti from "@/components/Confetti";
+import ScrollToTop from "@/components/ScrollToTop";
 
 /* Fixed balloon positions – no Math.random() so SSR is safe */
 const BALLOONS = [
@@ -42,6 +43,7 @@ export default function Home() {
   return (
     <main style={{ background: "#FBF4E4", color: "#242424", overflowX: "hidden" }}>
       <Confetti />
+      <ScrollToTop />
 
       {/* ── Fixed balloon background ── */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
@@ -109,7 +111,7 @@ export default function Home() {
             className="card-lift px-8 py-4 rounded-full font-bold text-lg shadow-lg"
             style={{ background: "#E75C7D", color: "#fff" }}
           >
-            Jetzt zusagen 🎉
+            Jetzt anmelden 🎉
           </a>
         </div>
 
