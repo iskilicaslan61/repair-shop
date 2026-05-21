@@ -29,15 +29,18 @@ export const handler = async (event) => {
     try {
       const result = await dynamo.send(new ScanCommand({
         TableName: TABLE,
-        Select: "COUNT",
         FilterExpression: "contains(#msg, :val)",
         ExpressionAttributeNames: { "#msg": "message" },
         ExpressionAttributeValues: { ":val": { S: "Kommt!" } },
+        ProjectionExpression: "guests_count",
       }));
+      const total = (result.Items ?? []).reduce((sum, item) => {
+        return sum + (parseInt(item.guests_count?.N ?? "1") || 1);
+      }, 0);
       return {
         statusCode: 200,
         headers: CORS,
-        body: JSON.stringify({ count: result.Count ?? 0 }),
+        body: JSON.stringify({ count: total }),
       };
     } catch {
       return {
@@ -56,7 +59,7 @@ export const handler = async (event) => {
     return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: "Invalid JSON" }) };
   }
 
-  const { name, email, phone, message, consent } = body;
+  const { name, email, phone, message, consent, guests_count } = body;
 
   if (!name || !email || !message) {
     return { statusCode: 422, headers: CORS, body: JSON.stringify({ error: "name, email, message zorunlu" }) };
@@ -81,8 +84,9 @@ export const handler = async (event) => {
       message:   { S: message },
       consent:   { BOOL: true },
       timestamp: { S: timestamp },
-      ip_hash:   { S: ip_hash },
-      expiresAt: { N: String(expiresAt) },
+      ip_hash:      { S: ip_hash },
+      expiresAt:    { N: String(expiresAt) },
+      guests_count: { N: String(guests_count ?? 1) },
     },
   }));
 
