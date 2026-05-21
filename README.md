@@ -1,70 +1,95 @@
 # Repair Shop — AWS Serverless Contact Form
 
-Next.js static site + AWS Lambda + SES + DynamoDB ile kurulmuş, GDPR uyumlu iletişim formu altyapısı.
+Next.js static site + AWS Lambda + SES + DynamoDB ile kurulmuş, GDPR/DSGVO uyumlu iletişim formu altyapısı.
+
+**Canlı site:** https://form.ismailkilicaslan.de
+
+---
 
 ## Stack
 
-| Katman | Servis |
-|---|---|
-| Frontend | Next.js (Static Export) |
-| Hosting | AWS Amplify |
-| Backend | AWS Lambda (Function URL) |
-| E-posta | AWS SES |
-| Veritabanı | AWS DynamoDB |
-| DNS | AWS Route53 |
+| Katman | Servis | Açıklama |
+|---|---|---|
+| Frontend | Next.js 16 (Static Export) | SSG ile hızlı, SEO-dostu |
+| Hosting | AWS Amplify | Manuel deploy (drag & drop) |
+| Backend | AWS Lambda (Function URL) | API Gateway olmadan doğrudan URL |
+| E-posta | AWS SES | Form bildirimleri |
+| Veritabanı | AWS DynamoDB | Form kayıtları, 90 gün TTL |
+| DNS | AWS Route53 | Domain yönetimi |
+
+**Tahmini aylık maliyet:** ~$0.50–2
+
+---
+
+## Proje Yapısı
+
+```
+repair-shop/
+├── app/
+│   ├── layout.tsx           # Root layout + CookieBanner
+│   ├── page.tsx             # Ana sayfa (Hero, Hizmetler, Form)
+│   ├── impressum/page.tsx   # Yasal zorunlu impressum sayfası
+│   └── datenschutz/page.tsx # GDPR gizlilik politikası
+├── components/
+│   ├── ContactForm.tsx      # Form + Lambda entegrasyonu
+│   └── CookieBanner.tsx     # GDPR cookie onayı
+├── lib/
+│   └── constants.ts         # Site bilgileri ve Lambda URL
+├── amplify.yml              # Amplify build config
+├── next.config.ts           # Static export ayarları
+└── .env.local               # Lambda URL (git'e gitmez!)
+```
 
 ---
 
 ## Ön Koşullar
 
 - AWS hesabı
-- GitHub hesabı
 - Node.js 22+
-- Bir domain (Route53'te kayıtlı)
+- Domain (Route53'te kayıtlı)
+- **Proje klasör yolu ASCII karakterler içermeli** — `ü`, `ö`, `ş` gibi Türkçe karakterler Turbopack'i çökertiyor. Doğru: `C:\projects\repair-shop`
 
 ---
 
 ## Adım 1 — AWS Region Seç
 
-Tüm servisleri aynı region'da kur. GDPR uyumu için:
-
 ```
 AWS Console → Sağ üst köşe → Europe (Frankfurt) eu-central-1
 ```
 
-> **Önemli:** Tüm adımlarda bu region seçili olmalı.
+> Tüm servisleri bu region'da kur. GDPR için veriler Almanya'da kalır.
 
 ---
 
 ## Adım 2 — SES Kurulumu
 
-### 2.1 E-posta Adresini Doğrula
+### E-posta Adresini Doğrula
 
 ```
-AWS Console → SES → Verified Identities → Create Identity
+SES → Verified Identities → Create Identity
 Identity type: Email address
-Email: info@sirketadi.de
+Email: info@siteadi.de
 ```
 
-Gelen doğrulama mailine tıkla, status `Verified` olacak.
+Gelen doğrulama mailine tıkla → status `Verified` olacak.
 
-### 2.2 Domain Doğrula
+### Domain Doğrula
 
 ```
 SES → Verified Identities → Create Identity
 Identity type: Domain
-Domain: sirketadi.de
+Domain: siteadi.de
 
 DKIM settings:
-  - Easy DKIM seç
+  - Easy DKIM
   - RSA_2048_BIT
-  - "Publish DNS records automatically" işaretle (Route53 aynı hesaptaysa otomatik ekler)
+  - "Publish DNS records automatically" ✓  ← Route53 aynı hesaptaysa otomatik ekler
 ```
 
-### 2.3 Production Access Talep Et (İsteğe Bağlı)
+### Production Access Talep Et (İsteğe Bağlı)
 
-Varsayılan sandbox modda sadece doğrulanmış adreslere mail gönderilir.
-Müşterilere otomatik onay maili göndermek istersen:
+Sandbox modda sadece doğrulanmış adreslere mail gönderilebilir.
+Müşterilere onay maili göndermek istersen:
 
 ```
 SES → Account Dashboard → Request Production Access
@@ -72,7 +97,7 @@ Mail type: Transactional
 Use case: Contact form notifications for repair shop website
 ```
 
-> Onay 1-2 iş günü sürer.
+> 1–2 iş günü onay süresi. Şimdilik sandbox yeterli — sadece doğrulanmış e-postalara gönderim yapar.
 
 ---
 
@@ -81,9 +106,11 @@ Use case: Contact form notifications for repair shop website
 ```
 AWS Console → DynamoDB → Create Table
 
-Table name:  contact-form-submissions
-Partition key: Id    Type: String   ← Büyük "I" olmalı!
+Table name:    contact-form-submissions
+Partition key: Id    Type: String
 ```
+
+> **Dikkat:** Partition key büyük "I" ile `Id` olmalı. Küçük `id` yazarsan Lambda "Missing the key Id" hatası verir.
 
 ### TTL Ayarı (GDPR — 90 gün otomatik silme)
 
@@ -93,13 +120,13 @@ DynamoDB → Tables → contact-form-submissions
 TTL attribute name: expiresAt
 ```
 
-> Lambda her kayıt eklerken `expiresAt` değerini otomatik hesaplar.
+Lambda her kayıt eklerken `expiresAt` değerini otomatik hesaplar (şimdiki zaman + 90 gün).
 
 ---
 
 ## Adım 4 — Lambda Fonksiyonu
 
-### 4.1 Oluştur
+### Oluştur
 
 ```
 AWS Console → Lambda → Create Function
@@ -109,9 +136,9 @@ Runtime:       Node.js 22.x
 Architecture:  arm64
 ```
 
-### 4.2 Kodu Ekle
+### Kodu Ekle
 
-`index.mjs` dosyasının içeriğini sil, şunu yapıştır:
+`index.mjs` dosyasının içini tamamen sil, şunu yapıştır ve **Deploy** bas:
 
 ```javascript
 import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
@@ -195,24 +222,22 @@ export const handler = async (event) => {
 };
 ```
 
-`Deploy` butonuna bas.
-
-### 4.3 Environment Variables
+### Environment Variables
 
 ```
-Lambda → Configuration → Environment variables → Edit
+Lambda → Configuration → Environment variables → Edit → Add
 
-DYNAMODB_TABLE   contact-form-submissions
-SES_FROM_EMAIL   info@sirketadi.de
-SES_TO_EMAIL     info@sirketadi.de
-ALLOWED_ORIGIN   https://form.sirketadi.de
+DYNAMODB_TABLE    contact-form-submissions
+SES_FROM_EMAIL    info@siteadi.de
+SES_TO_EMAIL      info@siteadi.de
+ALLOWED_ORIGIN    https://form.siteadi.de
 ```
 
-### 4.4 IAM İzinleri
+### IAM İzinleri
 
 ```
 Lambda → Configuration → Permissions → Role name → IAM Console
-→ Add permissions → Create inline policy → JSON
+→ Add permissions → Create inline policy → JSON sekmesi
 ```
 
 ```json
@@ -235,49 +260,55 @@ Lambda → Configuration → Permissions → Role name → IAM Console
 
 Policy name: `contact-form-policy` → Create.
 
-### 4.5 Function URL Aktif Et
+### Function URL Aktif Et
 
 ```
 Lambda → Configuration → Function URL → Create function URL
 Auth type: NONE
 ```
 
-Oluşan URL'yi not al:
-```
-https://xxxxxxxx.lambda-url.eu-central-1.on.aws/
-```
+Oluşan URL'yi `.env.local` dosyasına ekle.
 
-### 4.6 Lambda Test Et
+### Lambda Test Et
 
 ```bash
-curl -X POST "https://xxxxxxxx.lambda-url.eu-central-1.on.aws/" \
+curl -X POST "https://XXXXXXXX.lambda-url.eu-central-1.on.aws/" \
   -H "Content-Type: application/json" \
   -d '{"name":"Test","email":"test@gmail.com","message":"Test","consent":true}'
 ```
 
-Başarılı yanıt:
-```json
-{"success":true,"id":"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"}
-```
+Beklenen yanıt: `{"success":true,"id":"..."}`
+
+Ardından kontrol et:
+- **DynamoDB → Explore items** — kayıt var mı? (`eu-central-1` region'ında bak!)
+- **Gmail** — "Neue Anfrage von Test" maili geldi mi? (Spam klasörünü de kontrol et)
 
 ---
 
 ## Adım 5 — Next.js Projesi
 
-### 5.1 Oluştur
+### Oluştur
 
 ```bash
-npx create-next-app@latest repair-shop --typescript --tailwind --app --no-src-dir --eslint --no-turbopack --no-import-alias
+npx create-next-app@latest repair-shop --typescript --tailwind --app --no-src-dir
 cd repair-shop
 ```
 
-### 5.2 `next.config.ts`
+### `.env.local`
+
+```env
+NEXT_PUBLIC_LAMBDA_URL=https://XXXXXXXX.lambda-url.eu-central-1.on.aws/
+```
+
+> Bu dosya `.gitignore`'da — GitHub'a push etme!
+
+### `next.config.ts`
 
 ```typescript
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "export",        // Amplify için static export
+  output: "export",
   trailingSlash: true,
   images: { unoptimized: true },
 };
@@ -285,25 +316,17 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ```
 
-### 5.3 `.env.local`
-
-```env
-NEXT_PUBLIC_LAMBDA_URL=https://xxxxxxxx.lambda-url.eu-central-1.on.aws/
-```
-
-> Bu dosya `.gitignore`'da olmalı — GitHub'a push etme.
-
-### 5.4 `lib/constants.ts`
+### `lib/constants.ts`
 
 ```typescript
 export const LAMBDA_URL = process.env.NEXT_PUBLIC_LAMBDA_URL!;
 export const SITE_NAME = "Repair Shop";
-export const SITE_EMAIL = "info@sirketadi.de";
+export const SITE_EMAIL = "info@siteadi.de";
 export const SITE_PHONE = "+49 30 123456";
 export const SITE_ADDRESS = "Musterstraße 1, 10115 Berlin";
 ```
 
-### 5.5 `amplify.yml` (proje köküne ekle)
+### `amplify.yml` (proje kökünde olmalı)
 
 ```yaml
 version: 1
@@ -324,42 +347,47 @@ frontend:
       - node_modules/**/*
 ```
 
-### 5.6 Build Test
+### Local Build
 
 ```bash
 npm run build
 # out/ klasörü oluşmalı
 ```
 
+> **Önemli:** Klasör yolunda Türkçe/Unicode karakter varsa (`ü`, `ö` vb.) Turbopack crash yapar. Projeyi ASCII yola koy: `C:\projects\repair-shop`
+
 ---
 
-## Adım 6 — Amplify ile Deploy
+## Adım 6 — Amplify Deploy
 
-### Seçenek A: Manuel Deploy (Önerilen — daha hızlı)
+### Manuel Deploy (Önerilen)
 
-```bash
+```powershell
 # out klasörünü ZIP'le
-# Windows PowerShell:
 Compress-Archive -Path ".\out\*" -DestinationPath ".\out.zip" -Force
 ```
 
 ```
 AWS Console → Amplify → Create new app
 → Deploy without Git provider
-→ out.zip dosyasını yükle (drag & drop)
+→ out.zip dosyasını drag & drop ile yükle
 ```
 
-### Seçenek B: GitHub ile Otomatik Deploy
+> **Neden manuel?** Amplify, GitHub entegrasyonunda Next.js'i SSR olarak algılar ve `required-server-files.json` hatası verir. Manuel deploy bu sorunu tamamen atlatır.
+
+### GitHub Otomatik Deploy (İsteğe Bağlı)
+
+GitHub entegrasyonu kullanmak istersen:
 
 ```
 Amplify → Create new app → GitHub
 → Repo: repair-shop, Branch: main
-→ Build output directory: out    ← .next değil, out olmalı!
+→ Build output directory: out   ← .next değil!
 → Environment variables: NEXT_PUBLIC_LAMBDA_URL ekle
 → Save and deploy
 ```
 
-> **Not:** Amplify Next.js'i SSR olarak algılayabilir. Sorun çıkarsa `amplify.yml` dosyasının repoda olduğundan emin ol.
+`amplify.yml` dosyası repoda olduğu sürece Amplify bunu otomatik algılar.
 
 ---
 
@@ -367,21 +395,34 @@ Amplify → Create new app → GitHub
 
 ```
 Amplify → repair-shop → Custom domains → Add domain
-Domain: sirketadi.de
-Subdomain: form
+Domain: siteadi.de
+Subdomain prefix: form
 ```
 
-Route53 aynı hesapta ise DNS kayıtları otomatik eklenir. SSL sertifikası 5-10 dakikada hazır olur.
+Route53 aynı AWS hesabındaysa DNS kayıtları otomatik eklenir.
+SSL sertifikası 5–10 dakikada hazır olur.
 
 ---
 
-## Adım 8 — Test Checklist
+## Adım 8 — Lambda CORS Güncelle
 
-- [ ] Lambda URL'ye direkt POST isteği gönder → `{"success":true}` dönmeli
-- [ ] DynamoDB'de kayıt oluştuğunu kontrol et (`eu-central-1` region'ında bak!)
-- [ ] Gmail/e-postada "Neue Anfrage" maili geldi mi?
+Domain bağlandıktan sonra Lambda'daki `ALLOWED_ORIGIN` değerini güncelle:
+
+```
+Lambda → contact-form-handler → Configuration → Environment variables → Edit
+
+ALLOWED_ORIGIN: https://form.siteadi.de
+```
+
+---
+
+## Adım 9 — Test Checklist
+
+- [ ] Lambda URL'ye direkt curl POST → `{"success":true}` dönmeli
+- [ ] DynamoDB'de kayıt var mı? (`eu-central-1` region'ında bak!)
+- [ ] Mail geldi mi? (Spam klasörünü de kontrol et)
 - [ ] Canlı sitede formu doldur ve gönder
-- [ ] Consent checkbox olmadan gönderim reddediliyor mu?
+- [ ] Consent checkbox olmadan gönderim engelleniyor mu?
 - [ ] `/impressum/` sayfası açılıyor mu?
 - [ ] `/datenschutz/` sayfası açılıyor mu?
 - [ ] Cookie banner görünüyor mu?
@@ -392,11 +433,23 @@ Route53 aynı hesapta ise DNS kayıtları otomatik eklenir. SSL sertifikası 5-1
 
 | Hata | Sebep | Çözüm |
 |---|---|---|
-| `Missing the key Id in the item` | DynamoDB partition key büyük "I" ile `Id`, kodda küçük `id` var | Lambda kodunda `Id: { S: id }` olmalı |
-| `Can't find required-server-files.json` | Amplify SSR modunda çalışıyor | `amplify.yml` ekle, output dir `out` yap |
-| DynamoDB boş görünüyor | Yanlış region'a bakıyorsun | Konsol sağ üstten `eu-central-1` seç |
-| Mail gelmiyor | Spam klasörüne düşmüş olabilir | Gmail spam'i kontrol et |
-| CORS hatası | `ALLOWED_ORIGIN` yanlış | Lambda env variable'ı güncelle, redeploy |
+| `Missing the key Id in the item` | Lambda'da `id` (küçük), DynamoDB'de `Id` (büyük) | Lambda kodunda `Id: { S: id }` olmalı |
+| `Can't find required-server-files.json` | Amplify SSR modunda çalışıyor | Manuel deploy kullan (drag & drop) |
+| DynamoDB tablosu boş görünüyor | Yanlış region'a bakılıyor | Konsol sağ üstten `eu-central-1` seç |
+| Mail gelmiyor | Spam'e düşmüş veya SES sandbox | Gmail spam kontrol et, sandbox'ta sadece doğrulanmış adrese gönderilir |
+| CORS hatası | `ALLOWED_ORIGIN` yanlış domain | Lambda env variable güncelle |
+| Turbopack panic / char boundary | Klasör yolunda Unicode karakter var | Projeyi ASCII yola taşı |
+
+---
+
+## GDPR / DSGVO
+
+- Form verileri **eu-central-1 (Frankfurt)** DynamoDB'de saklanır — veri AB'de kalır
+- IP adresi ham değil **SHA-256 hash** olarak kaydedilir
+- Tüm kayıtlar **90 gün** sonra DynamoDB TTL ile otomatik silinir
+- Consent checkbox olmadan form gönderilemez
+- `/datenschutz/` — veri işleme politikası
+- `/impressum/` — Almanya'da yasal zorunluluk
 
 ---
 
@@ -408,5 +461,5 @@ Route53 aynı hesapta ise DNS kayıtları otomatik eklenir. SSL sertifikası 5-1
 | DynamoDB | $0 (free tier) |
 | SES | ~$0.01 |
 | Amplify Hosting | $0 (free tier) |
-| Route53 | $0.50 |
+| Route53 | $0.50/hosted zone |
 | **Toplam** | **~$0.50–2** |
