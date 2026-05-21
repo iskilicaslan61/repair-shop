@@ -1,20 +1,20 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import CookieBanner from "@/components/CookieBanner";
-import { SITE_NAME } from "@/lib/constants";
 
-const geist = Geist({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
 
 export const metadata: Metadata = {
-  title: SITE_NAME,
-  description: "Ihr zuverlässiger Reparaturservice",
+  title: "Muaz & Mikail 🎂 – Private Geburtstagsparty",
+  description: "Du bist eingeladen! Muaz wird 4 und Mikail wird 7 Jahre alt. Feier mit uns am 7. Juni 2026.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="de" className={geist.className}>
-      <body className="min-h-screen flex flex-col bg-white text-gray-900">
+    <html lang="de" className={`${inter.variable} ${playfair.variable}`}>
+      <body className="min-h-screen flex flex-col">
         {children}
         <CookieBanner />
       </body>
