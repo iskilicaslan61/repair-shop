@@ -2,7 +2,7 @@
 
 Next.js static site + AWS Lambda + SES + DynamoDB ile kurulmuş, GDPR/DSGVO uyumlu doğum günü partisi davetiye sitesi.
 
-**Canlı site:** https://party.ismailkilicaslan.de  
+**Canlı site:** https://party.yourdomain.de  
 **Party tarihi:** 7. Juni 2026, 15:00 Uhr
 
 ---
@@ -67,8 +67,8 @@ RSVP formunu kaydeder ve HTML formatlı e-posta gönderir.
 **Request body:**
 ```json
 {
-  "name": "Ahmet Yılmaz",
-  "email": "ahmet@example.com",
+  "name": "Max Mustermann",
+  "email": "max@example.com",
   "phone": "+49 176 123456",
   "message": "✅ Kommt! Personenanzahl: 3",
   "consent": true,
@@ -108,7 +108,7 @@ AWS Console → Europe (Frankfurt) eu-central-1
 ```
 SES → Verified Identities → Create Identity
 Identity type: Domain
-Domain: ismailkilicaslan.de
+Domain: yourdomain.de
 
 DKIM settings: Easy DKIM, RSA_2048_BIT
 "Publish DNS records automatically" ✓
@@ -143,9 +143,9 @@ Architecture:  arm64
 **Environment Variables:**
 ```
 DYNAMODB_TABLE    contact-form-submissions
-SES_FROM_EMAIL    noreply@ismailkilicaslan.de
-SES_TO_EMAIL      ismailkilicaslan61@gmail.com
-ALLOWED_ORIGIN    https://party.ismailkilicaslan.de
+SES_FROM_EMAIL    noreply@yourdomain.de
+SES_TO_EMAIL      you@youremail.com
+ALLOWED_ORIGIN    https://party.yourdomain.de
 ENCRYPTION_KEY    <32-byte hex — node -e "require('crypto').randomBytes(32).toString('hex')" ile üret>
 ```
 
@@ -172,7 +172,7 @@ ENCRYPTION_KEY    <32-byte hex — node -e "require('crypto').randomBytes(32).to
 ```
 Lambda → Configuration → Function URL → Create function URL
 Auth type: NONE
-CORS: Allowed origins → https://party.ismailkilicaslan.de
+CORS: Allowed origins → https://party.yourdomain.de
 ```
 
 ### 5. Next.js — `.env.local`
@@ -197,7 +197,7 @@ NEXT_PUBLIC_LAMBDA_URL
 
 ```
 Amplify → repair-shop → Custom domains → Add domain
-Domain: ismailkilicaslan.de
+Domain: yourdomain.de
 Subdomain prefix: party
 ```
 
@@ -230,10 +230,9 @@ curl -X POST https://XXXXXXXX.lambda-url.eu-central-1.on.aws/ \
 
 | Hata | Sebep | Çözüm |
 |---|---|---|
-| `Missing the key Id` | Lambda'da `id` küçük harf | `Id: { S: id }` olmalı |
 | `not authorized to perform: dynamodb:Scan` | IAM'da Scan izni yok | Inline policy'ye `dynamodb:Scan` ekle |
 | CORS hatası | `ALLOWED_ORIGIN` yanlış | Lambda env var + Function URL CORS güncelle |
-| Mail spam'e düşüyor | Gmail adresiyle SES gönderimi | `noreply@ismailkilicaslan.de` kullan |
+| Mail spam'e düşüyor | Gmail adresiyle SES gönderimi | `noreply@yourdomain.de` kullan |
 | `Can't find required-server-files.json` | Amplify SSR modu | GitHub Actions deploy kullan |
 | Turbopack crash | Klasör yolunda `ü`, `ö` gibi Unicode | Projeyi ASCII yola taşı |
 
@@ -247,3 +246,7 @@ curl -X POST https://XXXXXXXX.lambda-url.eu-central-1.on.aws/ \
 - Tüm kayıtlar **90 gün** sonra DynamoDB TTL ile otomatik silinir
 - Consent checkbox olmadan form gönderilemez
 - `/datenschutz/` ve `/impressum/` sayfaları mevcut
+
+---
+
+*Made by Ismail*
