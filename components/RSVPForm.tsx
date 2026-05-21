@@ -36,6 +36,7 @@ export default function RSVPForm() {
           message: messageText,
           consent: true,
           guests_count: form.attending === "ja" ? parseInt(form.guests) : 0,
+          attending: form.attending === "ja",
         }),
       });
       if (!res.ok) throw new Error();
