@@ -33,6 +33,8 @@ jobs:
           AWS_DEFAULT_REGION: us-east-1
           AMPLIFY_APP_ID: ${{ secrets.AMPLIFY_APP_ID }}
         run: |
+          aws amplify create-branch --app-id $AMPLIFY_APP_ID --branch-name main 2>/dev/null || true
+
           DEPLOYMENT=$(aws amplify create-deployment \
             --app-id $AMPLIFY_APP_ID \
             --branch-name main \
