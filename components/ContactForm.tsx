@@ -43,7 +43,7 @@ export default function ContactForm() {
       <input
         required
         type="text"
-        placeholder="Ihr Name *"
+        placeholder="Ihr Name * (z.B. Max Mustermann)"
         value={form.name}
         onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
         className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -51,14 +51,14 @@ export default function ContactForm() {
       <input
         required
         type="email"
-        placeholder="E-Mail *"
+        placeholder="E-Mail * (z.B. name@beispiel.de)"
         value={form.email}
         onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
         className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <input
         type="tel"
-        placeholder="Telefon"
+        placeholder="Telefon (z.B. +49 30 123456)"
         value={form.phone}
         onChange={e => setForm(p => ({ ...p, phone: e.target.value }))}
         className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -66,7 +66,7 @@ export default function ContactForm() {
       <textarea
         required
         rows={5}
-        placeholder="Ihre Nachricht *"
+        placeholder="Ihre Nachricht * (z.B. Mein iPhone 14 Display ist gebrochen, wann kann ich vorbeikommen?)"
         value={form.message}
         onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
         className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
