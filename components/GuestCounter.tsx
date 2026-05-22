@@ -17,7 +17,7 @@ export default function GuestCounter() {
   return (
     <div
       className="flex items-center justify-center gap-2 mb-6 px-6 py-3 rounded-full font-semibold text-lg animate-pulse-scale"
-      style={{ background: "#C8C72A", color: "#242424", display: "inline-flex" }}
+      style={{ background: "#38BDF8", color: "#1E293B", display: "inline-flex" }}
     >
       <span>🎉</span>
       <span>Bereits <strong>{count}</strong> {count === 1 ? "Gast hat" : "Gäste haben"} zugesagt!</span>

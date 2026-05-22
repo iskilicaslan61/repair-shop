@@ -7,7 +7,7 @@ function pad(n: number) {
   return String(n).padStart(2, "0");
 }
 
-const UNIT_COLORS = ["#E75C7D", "#C8C72A", "#E75C7D", "#C8C72A"];
+const UNIT_COLORS = ["#2563EB", "#38BDF8", "#2563EB", "#38BDF8"];
 
 export default function Countdown() {
   const [time, setTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0, done: false });
@@ -34,7 +34,7 @@ export default function Countdown() {
 
   if (time.done) {
     return (
-      <p className="text-2xl font-bold text-center animate-pulse-scale" style={{ color: "#E75C7D" }}>
+      <p className="text-2xl font-bold text-center animate-pulse-scale" style={{ color: "#2563EB" }}>
         🎉 Die Party hat begonnen!
       </p>
     );
@@ -59,7 +59,7 @@ export default function Countdown() {
               {u.value}
             </span>
           </div>
-          <span className="text-xs mt-2 font-semibold uppercase tracking-wider" style={{ color: "#242424" }}>
+          <span className="text-xs mt-2 font-semibold uppercase tracking-wider" style={{ color: "#1E293B" }}>
             {u.label}
           </span>
         </div>

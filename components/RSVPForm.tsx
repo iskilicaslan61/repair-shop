@@ -53,10 +53,10 @@ export default function RSVPForm() {
         <p className="text-6xl animate-bounce-gentle">
           {form.attending === "ja" ? "🎉" : "💌"}
         </p>
-        <p className="text-3xl font-bold" style={{ color: "#E75C7D" }}>
+        <p className="text-3xl font-bold" style={{ color: "#2563EB" }}>
           {form.attending === "ja" ? "Super! Wir freuen uns! 🎈" : "Danke für deine Antwort!"}
         </p>
-        <p className="text-lg" style={{ color: "#242424" }}>
+        <p className="text-lg" style={{ color: "#1E293B" }}>
           {form.attending === "ja"
             ? "Deine Anmeldung wurde erfolgreich übermittelt."
             : "Schade, aber vielleicht beim nächsten Mal!"}
@@ -66,8 +66,8 @@ export default function RSVPForm() {
   }
 
   const inputClass = "w-full px-5 py-3 rounded-2xl text-base font-medium focus:outline-none transition-colors"
-    + " border-2 border-transparent focus:border-[#E75C7D]"
-    + " bg-[#FBF4E4] text-[#242424] placeholder:text-gray-400";
+    + " border-2 border-transparent focus:border-[#2563EB]"
+    + " bg-[#EFF6FF] text-[#1E293B] placeholder:text-gray-400";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
@@ -100,8 +100,8 @@ export default function RSVPForm() {
             className="py-3 px-3 rounded-2xl text-sm font-semibold transition-all border-2"
             style={
               form.attending === opt.value
-                ? { background: "#E75C7D", borderColor: "#E75C7D", color: "#fff" }
-                : { background: "#FBF4E4", borderColor: "#e5e5e5", color: "#242424" }
+                ? { background: "#2563EB", borderColor: "#2563EB", color: "#fff" }
+                : { background: "#EFF6FF", borderColor: "#e5e5e5", color: "#1E293B" }
             }
           >
             {opt.label}
@@ -111,7 +111,7 @@ export default function RSVPForm() {
 
       {form.attending === "ja" && (
         <div>
-          <label className="block font-semibold mb-2" style={{ color: "#242424" }}>
+          <label className="block font-semibold mb-2" style={{ color: "#1E293B" }}>
             Wie viele kommen?
           </label>
           <select
@@ -134,30 +134,30 @@ export default function RSVPForm() {
         className={`${inputClass} resize-none`}
       />
 
-      <label className="flex items-start gap-3 text-sm font-medium cursor-pointer" style={{ color: "#242424" }}>
+      <label className="flex items-start gap-3 text-sm font-medium cursor-pointer" style={{ color: "#1E293B" }}>
         <input
           type="checkbox"
           checked={form.consent}
           onChange={e => setForm(p => ({ ...p, consent: e.target.checked }))}
-          className="mt-1 accent-[#E75C7D] w-4 h-4"
+          className="mt-1 accent-[#2563EB] w-4 h-4"
         />
         <span>
           Ich stimme der Verarbeitung meiner Daten gemäß der{" "}
-          <a href="/datenschutz/" className="underline font-semibold" style={{ color: "#E75C7D" }}>
+          <a href="/datenschutz/" className="underline font-semibold" style={{ color: "#2563EB" }}>
             Datenschutzerklärung
           </a>{" "}zu. *
         </span>
       </label>
 
       {errorMsg && (
-        <p className="text-sm font-medium" style={{ color: "#E75C7D" }}>{errorMsg}</p>
+        <p className="text-sm font-medium" style={{ color: "#2563EB" }}>{errorMsg}</p>
       )}
 
       <button
         type="submit"
         disabled={status === "loading"}
         className="w-full py-4 rounded-2xl font-bold text-lg shadow-lg transition-all disabled:opacity-50"
-        style={{ background: "#C8C72A", color: "#242424" }}
+        style={{ background: "#38BDF8", color: "#1E293B" }}
       >
         {status === "loading" ? "Wird gesendet… 🎈" : "Ich bin dabei! 🎉"}
       </button>

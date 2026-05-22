@@ -11,12 +11,12 @@ const WA_TEXT = encodeURIComponent(
 );
 
 const BALLOONS = [
-  { color: "#E75C7D", size: 50, left: "5%",  top: "10%", cls: "animate-float" },
-  { color: "#C8C72A", size: 40, left: "90%", top: "20%", cls: "animate-float-delayed" },
-  { color: "#E75C7D", size: 35, left: "8%",  top: "60%", cls: "animate-float-slow" },
-  { color: "#C8C72A", size: 45, left: "85%", top: "70%", cls: "animate-float" },
-  { color: "#E75C7D", size: 30, left: "3%",  top: "85%", cls: "animate-float-delayed" },
-  { color: "#C8C72A", size: 38, left: "92%", top: "50%", cls: "animate-float-slow" },
+  { color: "#2563EB", size: 50, left: "5%",  top: "10%", cls: "animate-float" },
+  { color: "#38BDF8", size: 40, left: "90%", top: "20%", cls: "animate-float-delayed" },
+  { color: "#2563EB", size: 35, left: "8%",  top: "60%", cls: "animate-float-slow" },
+  { color: "#38BDF8", size: 45, left: "85%", top: "70%", cls: "animate-float" },
+  { color: "#2563EB", size: 30, left: "3%",  top: "85%", cls: "animate-float-delayed" },
+  { color: "#38BDF8", size: 38, left: "92%", top: "50%", cls: "animate-float-slow" },
 ];
 
 function Balloon({ color, size, left, top, cls }: typeof BALLOONS[0]) {
@@ -35,19 +35,19 @@ function Balloon({ color, size, left, top, cls }: typeof BALLOONS[0]) {
 }
 
 const ACTIVITIES = [
-  { icon: "🎮", title: "Spiele & Spaß",    desc: "Actionreiche Spiele, die die Kinder begeistern!",       border: "#E75C7D" },
-  { icon: "🎁", title: "Überraschungen",    desc: "Besondere Momente für die Geburtstagskinder.",           border: "#C8C72A" },
-  { icon: "🍰", title: "Riesige Torte",     desc: "Mit 4 & 7 Kerzen – natürlich für beide!",               border: "#E75C7D" },
-  { icon: "🎈", title: "Ballonspiele",      desc: "So viel Spaß mit bunten Ballons!",                       border: "#C8C72A" },
-  { icon: "🎨", title: "Bastel-Ecke",       desc: "Bastele deine eigene Geburtstagskrone!",                 border: "#E75C7D" },
-  { icon: "💃", title: "Musik & Tanz",      desc: "Lieblingslieder und wilde Tanzeinlagen!",                border: "#C8C72A" },
+  { icon: "🎮", title: "Spiele & Spaß",    desc: "Actionreiche Spiele, die die Kinder begeistern!",       border: "#2563EB" },
+  { icon: "🎁", title: "Überraschungen",    desc: "Besondere Momente für die Geburtstagskinder.",           border: "#38BDF8" },
+  { icon: "🍰", title: "Riesige Torte",     desc: "Mit 4 & 7 Kerzen – natürlich für beide!",               border: "#2563EB" },
+  { icon: "🎈", title: "Ballonspiele",      desc: "So viel Spaß mit bunten Ballons!",                       border: "#38BDF8" },
+  { icon: "🎨", title: "Bastel-Ecke",       desc: "Bastele deine eigene Geburtstagskrone!",                 border: "#2563EB" },
+  { icon: "💃", title: "Musik & Tanz",      desc: "Lieblingslieder und wilde Tanzeinlagen!",                border: "#38BDF8" },
 ];
 
 const GALLERY = ["🎂","🎁","🎵","🎈","😊","⭐","✨","❤️","🎀","🪄","🍭","🎪"];
 
 export default function Home() {
   return (
-    <main style={{ background: "#FBF4E4", color: "#242424", overflowX: "hidden" }}>
+    <main style={{ background: "#EFF6FF", color: "#1E293B", overflowX: "hidden" }}>
       <Confetti />
       <ScrollToTop />
 
@@ -66,7 +66,7 @@ export default function Home() {
 
         {/* Floating icon */}
         <div className="animate-float mb-6">
-          <div className="rounded-full p-6 shadow-2xl inline-block" style={{ background: "#E75C7D" }}>
+          <div className="rounded-full p-6 shadow-2xl inline-block" style={{ background: "#2563EB" }}>
             <span className="text-5xl">🎉</span>
           </div>
         </div>
@@ -74,7 +74,7 @@ export default function Home() {
         {/* Main headline */}
         <h1
           className="font-bold leading-none mb-4"
-          style={{ fontSize: "clamp(3rem,12vw,7rem)", textShadow: "5px 5px 0px #C8C72A", color: "#242424" }}
+          style={{ fontSize: "clamp(3rem,12vw,7rem)", textShadow: "5px 5px 0px #38BDF8", color: "#1E293B" }}
         >
           MUAZ & MIKAIL
         </h1>
@@ -82,7 +82,7 @@ export default function Home() {
         {/* Badge */}
         <div
           className="inline-block px-8 py-3 rounded-full text-2xl md:text-4xl font-bold mb-6"
-          style={{ background: "#E75C7D", color: "#fff", transform: "rotate(-2deg)" }}
+          style={{ background: "#2563EB", color: "#fff", transform: "rotate(-2deg)" }}
         >
           4 & 7. GEBURTSTAG 🎂
         </div>
@@ -96,14 +96,14 @@ export default function Home() {
           <a
             href="#details"
             className="card-lift px-8 py-4 rounded-full font-bold text-lg shadow-lg"
-            style={{ background: "#C8C72A", color: "#242424" }}
+            style={{ background: "#38BDF8", color: "#1E293B" }}
           >
             Details ansehen
           </a>
           <a
             href="#rsvp"
             className="card-lift px-8 py-4 rounded-full font-bold text-lg shadow-lg"
-            style={{ background: "#E75C7D", color: "#fff" }}
+            style={{ background: "#2563EB", color: "#fff" }}
           >
             Jetzt anmelden 🎉
           </a>
@@ -125,7 +125,7 @@ export default function Home() {
 
         {/* Countdown */}
         <div className="w-full max-w-lg">
-          <p className="text-sm font-semibold uppercase tracking-widest mb-4" style={{ color: "#E75C7D" }}>
+          <p className="text-sm font-semibold uppercase tracking-widest mb-4" style={{ color: "#2563EB" }}>
             Noch bis zur Party
           </p>
           <Countdown />
@@ -139,17 +139,17 @@ export default function Home() {
         <div className="max-w-5xl mx-auto">
 
           <Reveal className="text-center mb-12">
-            <h2 className="font-bold mb-3" style={{ fontSize: "clamp(2rem,6vw,3.5rem)", color: "#242424" }}>
+            <h2 className="font-bold mb-3" style={{ fontSize: "clamp(2rem,6vw,3.5rem)", color: "#1E293B" }}>
               Party Details
             </h2>
-            <div className="h-2 w-28 rounded-full mx-auto" style={{ background: "#C8C72A" }} />
+            <div className="h-2 w-28 rounded-full mx-auto" style={{ background: "#38BDF8" }} />
           </Reveal>
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { icon: "📅", title: "Wann?",    lines: ["Sonntag", "7. Juni", "2026"],         border: "#E75C7D" },
-              { icon: "🕒", title: "Uhrzeit?", lines: ["Beginn um", "15:00 Uhr", "bis ca. 18:00"], border: "#C8C72A" },
-              { icon: "🏠", title: "Wo?",      lines: ["Bei uns", "Zuhause", "Adresse folgt"], border: "#E75C7D" },
+              { icon: "📅", title: "Wann?",    lines: ["Sonntag", "7. Juni", "2026"],         border: "#2563EB" },
+              { icon: "🕒", title: "Uhrzeit?", lines: ["Beginn um", "15:00 Uhr", "bis ca. 18:00"], border: "#38BDF8" },
+              { icon: "🏠", title: "Wo?",      lines: ["Bei uns", "Zuhause", "Adresse folgt"], border: "#2563EB" },
             ].map((card, i) => (
               <Reveal key={card.title} delay={i * 0.12}>
                 <div
@@ -162,9 +162,9 @@ export default function Home() {
                   >
                     {card.icon}
                   </div>
-                  <h3 className="text-2xl font-bold mb-3" style={{ color: "#242424" }}>{card.title}</h3>
+                  <h3 className="text-2xl font-bold mb-3" style={{ color: "#1E293B" }}>{card.title}</h3>
                   {card.lines.map((line, j) => (
-                    <p key={j} className={j === 1 ? "text-3xl font-bold" : "text-lg"} style={{ color: j === 1 ? card.border : "#242424" }}>
+                    <p key={j} className={j === 1 ? "text-3xl font-bold" : "text-lg"} style={{ color: j === 1 ? card.border : "#1E293B" }}>
                       {line}
                     </p>
                   ))}
@@ -182,10 +182,10 @@ export default function Home() {
         <div className="max-w-5xl mx-auto">
 
           <Reveal className="text-center mb-12">
-            <h2 className="font-bold mb-3" style={{ fontSize: "clamp(2rem,6vw,3.5rem)", color: "#242424" }}>
+            <h2 className="font-bold mb-3" style={{ fontSize: "clamp(2rem,6vw,3.5rem)", color: "#1E293B" }}>
               Was erwartet euch?
             </h2>
-            <div className="h-2 w-28 rounded-full mx-auto" style={{ background: "#E75C7D" }} />
+            <div className="h-2 w-28 rounded-full mx-auto" style={{ background: "#2563EB" }} />
           </Reveal>
 
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -201,7 +201,7 @@ export default function Home() {
                   >
                     {a.icon}
                   </div>
-                  <h3 className="text-xl font-bold mb-2" style={{ color: "#242424" }}>{a.title}</h3>
+                  <h3 className="text-xl font-bold mb-2" style={{ color: "#1E293B" }}>{a.title}</h3>
                   <p className="text-sm" style={{ color: "#555" }}>{a.desc}</p>
                 </div>
               </Reveal>
@@ -217,16 +217,16 @@ export default function Home() {
         <div className="max-w-4xl mx-auto">
 
           <Reveal className="text-center mb-12">
-            <h2 className="font-bold mb-3" style={{ fontSize: "clamp(2rem,6vw,3.5rem)", color: "#242424" }}>
+            <h2 className="font-bold mb-3" style={{ fontSize: "clamp(2rem,6vw,3.5rem)", color: "#1E293B" }}>
               Party-Vibes 🥳
             </h2>
-            <div className="h-2 w-28 rounded-full mx-auto" style={{ background: "#C8C72A" }} />
+            <div className="h-2 w-28 rounded-full mx-auto" style={{ background: "#38BDF8" }} />
           </Reveal>
 
           <Reveal delay={0.1}>
             <div className="grid grid-cols-4 md:grid-cols-6 gap-4">
               {GALLERY.map((emoji, i) => {
-                const bg = i % 3 === 0 ? "#E75C7D" : i % 3 === 1 ? "#C8C72A" : "#242424";
+                const bg = i % 3 === 0 ? "#2563EB" : i % 3 === 1 ? "#38BDF8" : "#1E293B";
                 return (
                   <div
                     key={emoji}
@@ -248,19 +248,19 @@ export default function Home() {
       <section
         id="rsvp"
         className="relative z-10 py-20 px-4"
-        style={{ background: "#E75C7D" }}
+        style={{ background: "#2563EB" }}
       >
         <div className="max-w-xl mx-auto">
           <Reveal>
             <div className="bg-white rounded-3xl p-8 md:p-12 shadow-2xl">
               <div className="text-center mb-6">
                 <div className="animate-wiggle inline-block text-6xl mb-4">🎁</div>
-                <h2 className="font-bold mb-3" style={{ fontSize: "clamp(2rem,6vw,3rem)", color: "#242424" }}>
+                <h2 className="font-bold mb-3" style={{ fontSize: "clamp(2rem,6vw,3rem)", color: "#1E293B" }}>
                   Bist du dabei?
                 </h2>
                 <p className="text-lg font-medium mb-4" style={{ color: "#555" }}>
                   Bitte bis zum{" "}
-                  <span className="font-bold" style={{ color: "#E75C7D" }}>31. Mai 2026</span>
+                  <span className="font-bold" style={{ color: "#2563EB" }}>31. Mai 2026</span>
                   {" "}anmelden!
                 </p>
                 {/* Live guest counter */}
@@ -277,25 +277,25 @@ export default function Home() {
       {/* ════════════════════════════════════
           GIFT IDEAS
       ════════════════════════════════════ */}
-      <section className="relative z-10 py-20 px-4" style={{ background: "#FBF4E4" }}>
+      <section className="relative z-10 py-20 px-4" style={{ background: "#EFF6FF" }}>
         <div className="max-w-3xl mx-auto text-center">
           <Reveal>
             <div className="text-5xl mb-6 animate-pulse-scale inline-block">✨</div>
-            <h2 className="font-bold mb-4" style={{ fontSize: "clamp(2rem,6vw,3rem)", color: "#242424" }}>
+            <h2 className="font-bold mb-4" style={{ fontSize: "clamp(2rem,6vw,3rem)", color: "#1E293B" }}>
               Geschenk-Ideen
             </h2>
             <p className="text-lg font-medium mb-8" style={{ color: "#555" }}>
               Muaz und Mikail wünschen sich Bücher, Spiele, LEGO oder Erlebnisse!<br />
               Aber das Wichtigste ist:{" "}
-              <strong style={{ color: "#E75C7D" }}>DASS IHR DA SEID!</strong> 🎈
+              <strong style={{ color: "#2563EB" }}>DASS IHR DA SEID!</strong> 🎈
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               {["📚 Bücher", "🧸 Kuscheltiere", "🎨 Mal-Sachen", "🧩 Puzzle & Spiele", "🪀 Spielzeug"].map(item => (
-                <span key={item} className="px-6 py-3 rounded-full font-bold shadow-md" style={{ background: "#fff", color: "#242424" }}>
+                <span key={item} className="px-6 py-3 rounded-full font-bold shadow-md" style={{ background: "#fff", color: "#1E293B" }}>
                   {item}
                 </span>
               ))}
-              <span className="px-6 py-3 rounded-full font-bold shadow-md" style={{ background: "#E75C7D", color: "#fff" }}>
+              <span className="px-6 py-3 rounded-full font-bold shadow-md" style={{ background: "#2563EB", color: "#fff" }}>
                 ❤️ Eure Anwesenheit
               </span>
             </div>
@@ -304,7 +304,7 @@ export default function Home() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="relative z-10 py-12 px-4 text-center" style={{ background: "#242424", color: "#fff" }}>
+      <footer className="relative z-10 py-12 px-4 text-center" style={{ background: "#1E293B", color: "#fff" }}>
         <div className="animate-bounce-gentle inline-block text-5xl mb-4">🎂</div>
         <h3 className="text-2xl font-bold mb-3">Wir sehen uns bei der Party!</h3>
 
@@ -326,9 +326,9 @@ export default function Home() {
           {["🎂","🎈","🎁","🎉","🥳"].map(e => <span key={e}>{e}</span>)}
         </div>
         <p className="text-sm" style={{ color: "#666" }}>
-          <a href="/datenschutz/" className="hover:underline" style={{ color: "#E75C7D" }}>Datenschutz</a>
+          <a href="/datenschutz/" className="hover:underline" style={{ color: "#38BDF8" }}>Datenschutz</a>
           &nbsp;·&nbsp;
-          <a href="/impressum/"   className="hover:underline" style={{ color: "#E75C7D" }}>Impressum</a>
+          <a href="/impressum/"   className="hover:underline" style={{ color: "#38BDF8" }}>Impressum</a>
         </p>
       </footer>
     </main>

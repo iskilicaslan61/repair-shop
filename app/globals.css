@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --bubblegum: #E75C7D;
-  --lemon: #C8C72A;
-  --marshmallow: #FBF4E4;
-  --graphite: #242424;
+  --bubblegum: #2563EB;
+  --lemon: #38BDF8;
+  --marshmallow: #EFF6FF;
+  --graphite: #1E293B;
 }
 
 html { scroll-behavior: smooth; }
